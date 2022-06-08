@@ -8,7 +8,7 @@ kaboom ( {
 });
 
 // Load all sprites from imgur
-loadRoot("https://i.imgur.com/");
+loadRoot("assets/sprites/");
 loadSprite("coin", "wbKxhcd.png");
 loadSprite("brick", "pogC9x5.png");
 
@@ -30,14 +30,27 @@ scene("game", () => {
         "                                                ",
         "                                                ",
         "==========================  ===========  =======",
+        "==========================  ===========  =======",
     ];
 
     // Define configuration for each symbol in the map.
     const levelCfg = {
         width: 20, // in pixels
         height: 20,
-        "=": [sprite("brick", solid())],
-        '$': [sprite("coin")],
+        "=": [
+            sprite("brick"), 
+            area(), 
+            solid(), 
+            origin("bot"), 
+            "brick"
+        ],
+        '$': [
+            sprite("coin"),
+            area(),
+            solid(),
+            origin("bot"),
+            "coin"
+        ],
     };
 
     // set game level
