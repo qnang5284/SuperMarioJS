@@ -8,8 +8,12 @@ kaboom ( {
 
 // Let's load all the sprites
 loadRoot("assets/sprites/");
+// loadAseprite loads a sprite from Aseprite software. The json is created with Aseprite and contains lines referring to animations and such
+// animations can be played with the .play() method. 
 loadAseprite("mario", "Mario.png", "Mario.json");
 loadAseprite("enemies", "enemies.png", "enemies.json");
+
+// loadSprite just loads a sprite file from the folder
 loadSprite("bigMushy", "bigMushy.png");
 loadSprite("brick", "brick.png");
 loadSprite("castle", "castle.png");
