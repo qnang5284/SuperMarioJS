@@ -1,6 +1,4 @@
 // initialize kaboom.js with stated settings
-import kaboom from "kaboom";
-
 kaboom ( {
     background: [134, 135, 247],
     width: 320,
@@ -10,7 +8,23 @@ kaboom ( {
 
 // Let's load all the sprites
 loadRoot("assets/sprites/");
-// load each sprite
+loadAseprite("mario", "Mario.png", "Mario.json");
+loadAseprite("enemies", "enemies.png", "enemies.json");
+loadSprite("bigMushy", "bigMushy.png");
+loadSprite("brick", "brick.png");
+loadSprite("castle", "castle.png");
+loadSprite("cloud", "cloud.png");
+loadSprite("coin", "coin.png");
+loadSprite("emptyBox", "emptyBox.png");
+loadSprite("ground", "ground.png");
+loadSprite("hill", "hill.png");
+loadSprite("pipe", "pipe.png");
+loadSprite("pipeBottom", "pipeBottom.png");
+loadSprite("pipeTop", "pipeTop.png");
+loadSprite("questionBox", "questionBox.png");
+loadSprite("shrubbery", "shrubbery.png");
+
+// Next: create level maps
 
 
 
