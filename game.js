@@ -205,6 +205,8 @@ scene("game", (levelNumber = 0) => {
     
     // Layers in the game scene, typically one for the background, another
     // for the actions taking place and the last is for User Interface
+    // We set "game" as the default layer so, if we don't specify the layer when
+    // adding a component, it will be set to the default layer.
     layers([
         "bg",
         "game",
@@ -244,6 +246,43 @@ scene("game", (levelNumber = 0) => {
         lifespan(1, {fade: 0.5})
     ]);
 
+    add([
+        text(`000`, {size: 10}),
+        pos(vec2(280, 5)),
+        color(255, 255, 255), 
+        origin("top"),
+        layer("ui"),
+    ]);
+
     const player = level.spawn("p", 1, 10);
+
+    const SPEED = 120;
+    const JUMP_FORCE=600;
+    onKeyDown("right", () => {
+        player.flipX(false);
+        player.move(SPEED, 0);
+    });
+
+    onKeyDown("left", () => {
+        player.flipX(true);
+        if (toScreen(player.pos).x > 20) {
+            player.move(-SPEED, 0);
+        }
+    });
+
+    onKeyPress("space", () => {
+        if (player.grounded()) {
+            player.jump(JUMP_FORCE);
+        }
+    });
+
+    // Add scrolling
+    player.onUpdate (() => {
+        var currCam = camPos();
+        if (currCam.x < player.pos.x) {
+            camPos(player.pos.x, currCam.y);
+        }
+    });
+
 
 });
