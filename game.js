@@ -185,7 +185,7 @@ scene("start", () => {
 
     // add component
     add([
-        text("Press enter to start", {size: 24}),
+        text("Dale al enter", {size: 24}),
         pos(vec2(160, 120)),
         origin("center"),
         color(255, 255, 255),
@@ -199,3 +199,51 @@ scene("start", () => {
 
 // the go() function allows to transition between scenes.
 go("start");
+
+
+scene("game", (levelNumber = 0) => {
+    
+    // Layers in the game scene, typically one for the background, another
+    // for the actions taking place and the last is for User Interface
+    layers([
+        "bg",
+        "game",
+        "ui",
+    ], "game");
+
+    // define the level as a constant, with a map and a configuration
+    const level = addLevel(LEVELS[levelNumber], levelConf);
+
+    // sprites in the background and ui layers are not to be interacted with
+    add([
+        sprite("cloud"),
+        pos(20, 50),
+        layer("bg")
+    ]);
+
+    add([
+        sprite("hill"),
+        pos(32, 208),
+        layer("bg"),
+        origin("bot")
+    ]);
+
+    add([
+        sprite("shrubbery"),
+        pos(200, 208),
+        layer("bg"),
+        origin("bot")
+    ]);
+
+    add([
+        text(`Level ${levelNumber + 1}`, {size: 24}),
+        pos(vec2(160, 120)),
+        color(255, 255, 255), 
+        origin("center"),
+        layer("ui"),
+        lifespan(1, {fade: 0.5})
+    ]);
+
+    const player = level.spawn("p", 1, 10);
+
+});
