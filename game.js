@@ -6,7 +6,7 @@ kaboom ( {
     scale: 2,
 });
 
-// Let's load all the sprites
+// Let's load all the sprites L:\Entorno_Desarrollo\SuperMarioJS\assets
 loadRoot("assets/sprites/");
 // loadAseprite loads a sprite from Aseprite software. The json is created with Aseprite and contains lines referring to animations and such
 // animations can be played with the .play() method. 
@@ -28,8 +28,174 @@ loadSprite("pipeTop", "pipeTop.png");
 loadSprite("questionBox", "questionBox.png");
 loadSprite("shrubbery", "shrubbery.png");
 
-// Next: create level maps
+// Levels are created as an array of Strings, which forms some kind of "layout"
+// We can add a new level as a new element of the array.
+const LEVELS = [
+    [
+      "                                                                                                ",
+      "                                                                                                ",
+      "                                                                                                ",
+      "                                                                                                ",
+      "                                                                                                ",
+      "                                                                                                ",
+      "                                                                                                ",
+      "      -?-b-                                                                                     ",
+      "                                                    ?        ?                                  ",
+      "                                                                                                ",
+      "                                      _                 ?                                       ",
+      "                                 _    |                                                         ",
+      "                           _     |    |                _                                        ",
+      "       E                   |     |    |   E   E        |                            H           ",
+      "================     ===========================================================================",
+      "================     ===========================================================================",
+    ],
+    [
+      "                                                                                             ",
+      "                                                                                             ",
+      "                                                                                             ",
+      "                                       ?                                                     ",
+      "                                                                                             ",
+      "                                   -?-                                                       ",
+      "                                                                                             ",
+      "      -?-b-                  -?-                                                             ",
+      "                                                                                             ",
+      "                                                                                             ",
+      "                                                                                             ",
+      "                                                                                             ",
+      "       _                                            _                                        ",
+      "       |                                            |          E    E            H           ",
+      "================     ========================================================================",
+      "================     ========================================================================",
+    ]
+  ];
 
+// Then we need to define a relationship between each symbol in the layout and each sprites.
+const levelConf = {
+    // grid size, width and height of each square in the grid.
+    width: 16,
+    height: 16, 
+    // pos specifies the position of the map in the Kaboom canvas. Typically, (0,0)
+    pos: vec2(0, 0),
 
+    // then we define each object as a list of components
+    "=": () => [
+        sprite("ground"),   // sprite assigned to the symbol
+        area(),             // area the sprite occupies
+        solid(),            // if set, the object can collide with others
+        origin("bot"),      // don't know what this does yet
+        "ground"            // name
+    ],
+    "-": () => [
+        sprite("brick"),
+        area(),
+        solid(),
+        origin("bot"),
+        "brick"
+    ],
+    "H": () => [
+        sprite("castle"),
+        area({width: 1, height: 240}), 
+        origin("bot"),
+        "castle"
+    ],
+    "?": () => [
+        sprite("questionBox"),
+        area(),
+        solid(),
+        origin("bot"),
+        'questionBox',
+        'coinBox',
+    ],
+    "b": () => [
+        sprite("questionBox"),
+        area(),
+        solid(),
+        origin("bot"),
+        'questionBox',
+        'mushyBox'
+    ],
+    "!": () => [
+        sprite("emptyBox"),
+        area(),
+        solid(),
+        // bump(),              // custom component
+        origin("bot"),
+        'emptyBox'
+    ],
+    "c": () => [
+        sprite("coin"),
+        area(),
+        solid(),
+        //bump(64, 8),          // custom component
+        cleanup(),
+        lifespan(0.4, {fade: 0.01}),
+        origin("bot"),
+        "coin"
+    ],
+    "M": () => [
+        sprite("bigMushy"),
+        area(),
+        solid(),
+        //patrol(10000),        // custom component
+        body(),                 // The sprite is affected by gravity
+        cleanup(),
+        origin("bot"),
+        "bigMushy"
+    ],
+    "|": () => [
+        sprite("pipeBottom"),
+        area(),
+        solid(),
+        origin("bot"),
+        "pipe"
+    ],
+    "_": () => [
+        sprite("pipeTop"),
+        area(),
+        solid(),
+        origin("bot"),
+        "pipe"
+    ],
+    "E": () => [
+        sprite("enemies", { anim: 'Walking'}),
+        area({width: 16, height: 16}),
+        solid(),
+        body(),
+        //patrol(50),
+        //enemy(),              // custom component
+        origin("bot"),
+        "badGuy"
+    ],
+    "p": () => [
+        sprite("mario", { frame: 0 }),
+        area({ width: 16, height: 16 }),
+        body(),
+        //mario(),              // custom component
+        //bump(150, 20, false),
+        origin("bot"),
+        "player"
+    ]
+};
 
+// Let's add a scene, now.
+// Kaboom allows us to group logic and levels together.
+// The first scene will be a Start Game screen. The game will go to that
+// Scene by default.
+scene("start", () => {
 
+    // add component
+    add([
+        text("Press enter to start", {size: 24}),
+        pos(vec2(160, 120)),
+        origin("center"),
+        color(255, 255, 255),
+    ]);
+
+    // set an event, go to next scene at an enter key release.
+    onKeyRelease("enter", () => {
+        go("game"); 
+    });
+});
+
+// the go() function allows to transition between scenes.
+go("start");
